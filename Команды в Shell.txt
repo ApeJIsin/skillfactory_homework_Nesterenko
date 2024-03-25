@@ -1,0 +1,45 @@
+(1.1) user_1 = User.objects.create_user('username1')
+(1.2) user_2 = User.objects.create_user('username2')
+
+(2.1) author_1 = Author.objects.create(user = user_1)
+(2.2) author_2 = Author.objects.create(user = user_2)
+
+(3.1) category_1 = Category.objects.create(name_category = 'первая')
+(3.2) category_2 = Category.objects.create(name_category = 'вторая')
+(3.3) category_3 = Category.objects.create(name_category = 'третья')
+(3.4) category_4 = Category.objects.create(name_category = 'четвертая')
+
+(4.1) post_1 = Post.objects.create(author = author_1, post_name = 'новость №1', post_text = 'какой-то текст')
+(4.2) post_2 = Post.objects.create(author = author_2, post_name = 'новость №2', post_text = 'какой-то текст')
+(4.3) post_3 = Post.objects.create(author = author_2, post_type = article, post_name = 'статья №1', post_text = 'какой-то текст')
+
+(5.1) post_1.category.add(category_1, category_2)
+(5.2) post_2.category.add(category_3)
+(5.3) post_3.category.add(category_4)
+
+(6.1) comment_1 = Comment.objects.create(post = post_1, user = user_2, comment = 'текст комментария')
+(6.2) comment_2 = Comment.objects.create(post = post_1, user = user_1, comment = 'текст комментария')
+(6.3) comment_3 = Comment.objects.create(post = post_2, user = user_1, comment = 'текст комментария')
+(6.4) comment_4 = Comment.objects.create(post = post_3, user = user_1, comment = 'текст комментария')
+
+(7.1) post_1.like()
+(7.2) post_2.dislike()
+(7.3) post_3.like()
+(7.4) comment_1.like()
+(7.5) comment_2.dislike()
+(7.6) comment_3.dislike()
+(7.7) comment_4.like()
+
+(8.1) author_1.update_rating()
+(8.2) author_2.update_rating()
+
+(9.1) best_user = Author.objects.order_by('-rating').values('user__username', 'rating').first()
+(9.2) best_user
+
+(10.1) best_post = Post.objects.order_by('-rating').values('time_create', 'author__user__username', 'rating', 'post_name').first()
+(10.2) best_post
+(10.3) best_post_for_preview = Post.objects.order_by('-rating').first()
+(10.4) best_post_for_preview.preview()
+
+(11.1) comments = Comment.objects.filter(post = best_post_for_preview)
+(11.2) comments
