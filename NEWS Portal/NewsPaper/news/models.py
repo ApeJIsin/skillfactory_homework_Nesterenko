@@ -34,7 +34,7 @@ class Post(models.Model):
     post_type = models.CharField(max_length=2, choices=POST, default=news)
     time_create = models.DateTimeField(auto_now_add=True)
     category = models.ManyToManyField(Category, through='PostCategory')
-    post_name = models.CharField(max_length=255)
+    post_name = models.CharField(max_length=255, unique=True)
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
 
@@ -49,6 +49,9 @@ class Post(models.Model):
     def preview(self):
         return f'{self.post_text[:124]}...'
 
+    def __str__(self):
+        return f'{self.post_name.title()}: {self.post_text}'
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -60,7 +63,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.TextField()
     time_comment = models.DateTimeField(auto_now_add=True)
-    comment_rating = models.CharField(default=0)
+    comment_rating = models.IntegerField(default=0)
 
     def like(self):
         self.comment_rating += 1
