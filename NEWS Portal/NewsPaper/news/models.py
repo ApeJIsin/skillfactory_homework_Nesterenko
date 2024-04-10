@@ -1,13 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
-
-# Create your models here.
+from django.urls import reverse
 
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.user}'
 
     def update_rating(self):
         author_post_rating = Post.objects.filter(author=self).aggregate(Sum('rating'))['rating__sum']*3
@@ -19,6 +21,9 @@ class Author(models.Model):
 
 class Category(models.Model):
     name_category = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name_category
 
 
 class Post(models.Model):
@@ -51,6 +56,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.post_name.title()}: {self.post_text}'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 
 class PostCategory(models.Model):
