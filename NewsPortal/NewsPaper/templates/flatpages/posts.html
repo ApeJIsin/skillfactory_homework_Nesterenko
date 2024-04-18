@@ -1,0 +1,49 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+    <h1>Свежие публикации!</h1>
+    <h5>{{ posts|length }}</h5>
+    <hr>
+    {% if posts %}
+        <table>
+            <tr>
+                <td>Заголовок</td>
+                <td>Дата публикации</td>
+                <td>Содержание</td>
+                <td>Автор</td>
+            </tr>
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.post_name|censor }}</td>
+                <td>{{ post.time_create|date:'d.m.Y' }} г.</td>
+                <td>{{ post.post_text|truncatechars:20|censor }}</td>
+                <td>{{ post.author }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h2>Нет ничего нового!</h2>
+    {% endif %}
+    {% if page_obj.has_previous %}
+        <a href="?{% url_replace page=1 %}">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+    {{ page_obj.number }}
+    {% if page_obj.has_next %}
+        <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+{% endblock content %}
