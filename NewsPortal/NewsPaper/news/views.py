@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.models import Group
+from django.core.cache import cache
 
 from .forms import PostForm, ProfileForm
 from .models import Post, Author, User, BaseRegisterForm, Category
@@ -33,6 +34,15 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'flatpages/post.html'
     context_object_name = 'post'
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["id"]}', None)
+
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["id"]}', obj)
+
+        return obj
 
 
 class PostSearch(ListView):

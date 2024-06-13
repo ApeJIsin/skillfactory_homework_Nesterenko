@@ -4,9 +4,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Sum
 from django.urls import reverse
 from django import forms
+from django.core.cache import cache
 
 
 class Author(models.Model):
+    full_name = models.CharField(max_length=255)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
 
@@ -46,6 +48,10 @@ class Post(models.Model):
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
 
+    @property
+    def low_rating(self):
+        return self.post_rating < 0
+
     def like(self):
         self.post_rating += 1
         self.save()
@@ -62,6 +68,11 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.delete(f'post-{self.pk}')
 
 
 class PostCategory(models.Model):
