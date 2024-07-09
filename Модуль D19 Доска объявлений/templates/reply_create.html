@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_tags %}
+
+{% block title %}
+Reply
+{% endblock title %}
+ 
+
+{% block content %}
+<div class="text-center">
+<h1>Reply creation and editing</h1>
+<br>
+<h3>{% current_time '%d %B %Y' %}</h3>
+<hr>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>
+    <input type="submit" value="Save" />
+</form>
+
+
+{% endblock content %}
+

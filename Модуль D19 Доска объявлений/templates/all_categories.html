@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+<hr>
+<h1 class="page-title">Categories:</h1>
+<hr>
+
+{% endblock title %}
+
+{% block content %}
+
+
+{% if categories %}
+    {% for category in categories %}
+        <div style="border: 2px solid #ccc; border-radius: 10px; padding: 15px; margin-bottom: 20px; background-color: #f8f9fa;">
+            <p>Category: {{ category.name }}</p>
+                {% if request.user not in category.subscribers.all %}
+                    <a class="btn btn-success", href="{% url 'subscribe' category.id %}">Subscribe</a>
+                {% else %}
+                    <p>You are subscribed to this category</p>
+                    <a class="btn btn-danger", href="{% url 'unsubscribe' category.id %}">Unsubscribe</a>
+                {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock content %}

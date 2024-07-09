@@ -1,0 +1,35 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_tags %}
+
+{% block title %}
+Reply
+{% endblock title %}
+ 
+
+{% block content %}
+    <h3>{% current_time '%d %B %Y' %}</h3><br>
+    {% if user.is_authenticated %}
+        {% if reply.accepted %}
+            <a>This reply is accepted</a>
+        {% else %}
+        <button><a href="{% url 'reply_accept' object.id %}"><span style="color: #339966;">Accept</span></a> </button>
+        {% endif %}
+        <p style="padding-left;"><button><a href="{% url 'reply_delete' object.id %}"><span style="color: #ff0000;">Deny</span></a> </button></p>
+
+<p style="text-align: left;"><strong>Reply title:</strong> {{ reply.reply_name }}</p>
+        <p style="text-align: left;"><strong>Replied to post:</strong> {{ reply.post_title }}</p>
+        <p style="text-align: left;"><strong>Text:</strong> {{ reply.text|safe }}</p>
+        <p style="text-align: left;"><strong>Date:</strong> {{ reply.created }}</p>
+        <p style="text-align: left;"><strong>Author:</strong> {{ reply.author }}</p>
+        <p style="text-align: left;"><strong>Accepted:</strong> {{ reply.accepted }}</p>
+<br>
+
+<br><br>
+
+    <button><a href="/profile/"><span>Back to personal page</span></a> </button>
+    {% endif %}
+
+
+{% endblock content %}
+

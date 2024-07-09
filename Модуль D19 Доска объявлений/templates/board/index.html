@@ -1,0 +1,36 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Author
+{% endblock title %}
+
+
+<br>
+{% block content %}
+    <h2>Personal page of authorized user <span style="color: orangered;">{{request.user.username}}</span></h2>
+        <div> Here you can search replies to whatever post you have created on AdBoard </div><br><br>
+<hr>
+<form action="" method="get">
+    {{ filterset.form }}
+    <br>
+    <div class="text-left"><input type="submit" value="Search"></div>
+</form><br>
+
+<hr>
+    {% if replies %}
+        <h4>All replies to the post:</h4>
+        {% for reply in replies %}
+            <p style="text-align: left;"><strong>Replied by:</strong> {{ reply.author }}</p>
+            <p style="text-align: left;"><strong>Text:</strong> <a href="{% url 'single_reply' reply.id %}">{{ reply.text|safe }}</a></p>
+            {% if reply.accepted %}
+            <p style="text-align: left; color: #339966;"><strong>Accepted</strong></p>
+            {% else %}
+            <p style="text-align: left; color: #ff0000;"><strong>Pending</strong></p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h4>No replies found :(</h4>
+    {% endif %}
+<br><button><a href="/profile/">Refresh search</a> </button>
+{% endblock %}
+

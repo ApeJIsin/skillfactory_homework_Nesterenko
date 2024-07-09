@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Author
+{% endblock title %}
+
+{% block content %}
+
+<h1>Edit <span style="color: orangered;">{{ request.user.username }}</span> user profile</h1>
+<br>
+{% if is_not_basic %}
+    <button> <a href="{% url 'upgrade' %}"> Let me make my own posts!</a> </button>
+{% endif %}
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>
+    <input type="submit" value="Save" />
+</form>
+{% endblock content %}
+

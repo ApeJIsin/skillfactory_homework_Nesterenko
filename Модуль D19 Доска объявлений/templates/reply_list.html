@@ -1,0 +1,82 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_tags %}
+
+{% block title %}
+Replies
+{% endblock title %}
+ 
+
+{% block content %}
+<div class="text-center">
+<h1>All replies</h1>
+<br>
+<h3>{% current_time '%d %B %Y' %}</h3>
+    <br><hr>
+    {% if replies %}
+    <h4>Replies found:
+        {{ replies|length }}</h4>
+        </div>
+        {% for post in posts %}
+            {% for reply in post.replies.all %}
+                    <table style="width: 100%; margin-left: auto; margin-right: auto;">
+                        <tbody>
+                            <tr style="height: 47px;">
+                                <td style="width: 300px; height: 47px;">
+                                    <p><h2 style="text-align: left;"><strong><a href="{% url 'single_reply' reply.id %}">{{ reply.reply_name|truncatechars:20 }}</a></strong></h2></p>
+                                </td>
+                                <td style="width: 200px; height: 47px;" colspan="2">
+                                    <p style="text-align: justify;">{{ reply.text|safe }}</p>
+                                </td>
+                                <td style="width: 400px; height: 47px;" colspan="1">
+                                    <p style="text-align: justify;">Reply to post: {{ reply.post_title }}</p>
+                                </td>
+                                <td style="width: 208.2px; height: 47px;">
+                                    <p style="text-align: right;">{{ reply.author.full_name }}</p>
+                                </td>
+                            </tr>
+                            <tr style="height: 35.975px;">
+                                <td style="width: 218px; text-align: center; height: 35.975px;" colspan="2">
+                                    <p><span style="color: #0000ff;">{{ reply.creation_date }}</span></p>
+                                </td>
+                                <td style="width: 523.8px; height: 35.975px; text-align: right;" colspan="2">
+                                    {% if reply.accepted %}
+                                    <p><span style="text-align: right; color: #339966;">Accepted</span></p>
+                                    {% else %}
+                                    <p><span style="text-align: right; color: #0000ff;">Accept</span></p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <h4>No replies found</h4>
+    {% endif %}
+
+<br>
+<div class="text-center"><a>Pages:</a>
+   {% if page_obj.has_previous %}
+
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+</div>
+
+
+{% endblock content %}

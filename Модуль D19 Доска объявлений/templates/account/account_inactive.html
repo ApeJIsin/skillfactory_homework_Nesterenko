@@ -1,0 +1,17 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Account activation{% endblock %}
+
+{% block content %}
+    <h1>Enter activation code</h1>
+    <form action="{% url 'confirm_user' %}" method="post">
+        {% csrf_token %}
+        <label>
+            <input class="text" type="text" name="code" placeholder="Enter activation code">
+        </label>
+        <input type="submit" value="Confirm">
+    </form>
+
+{% endblock %}

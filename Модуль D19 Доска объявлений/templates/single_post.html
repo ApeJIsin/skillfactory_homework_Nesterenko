@@ -1,0 +1,37 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_tags %}
+
+
+{% block content %}
+<br>
+<table style="margin-left: auto; margin-right: auto;">
+<tbody>
+<tr>
+    <td><button><a href="{% url 'reply_create' %}">Reply to post</a> </button></td>
+    <td><button><a href="{% url 'post_update' object.id %}">Edit post</a> </button></td>
+    <td><button><a href="{% url 'post_delete' object.id %}">Delete post</a> </button></td>
+</tr>
+</tbody>
+</table>
+    <p><h3>{% current_time '%d %B %Y' %}</h3></p>
+<hr>
+    <br><br>
+        <h4>{{ post.title }}</h4>
+        <h4>{{ post.text|safe }}</h4>
+        <a>Author: {{ post.author }}</a>
+<br><br>
+<hr>
+{% if user.author == post_author %}
+    {% if post.post_replies.all %}
+        <h4>Replies:</h4><br>
+            {% for reply in post.post_replies.all %}
+                <p><a href="{% url 'single_reply' reply.id %}"> {{ reply.preview|safe }}</a> by: {{ reply.author }}</p>
+            {% endfor %}
+    {% else %}
+        <a>No replies yet</a><br>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}
+

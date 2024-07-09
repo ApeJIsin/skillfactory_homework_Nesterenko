@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Reply
+{% endblock title %}
+
+
+{% block content %}
+<h1>Reply extermination</h1>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Do you really want to delete "{{ object }}"?</p>
+    <input type="submit" class="btn btn-warning" value="Delete" />
+</form>
+<p>
+<input type="button" onclick="history.back();" class="btn btn-secondary"
+                value="No, get back"/>
+<br><br></p>
+{% endblock content %}

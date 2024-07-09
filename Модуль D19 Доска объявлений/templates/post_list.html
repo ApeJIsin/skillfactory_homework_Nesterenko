@@ -1,0 +1,84 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_tags %}
+
+{% block title %}
+Posts
+{% endblock title %}
+ 
+
+{% block content %}
+<div class="text-center">
+<h1>All posts</h1>
+<br>
+<h3>{% current_time '%d %B %Y' %}</h3>
+<hr>
+    {% if posts %}
+    <h4>Posts found:
+        {{ posts|length }}</h4>
+        </div>
+        {% for post in posts %}
+            <table style="width: 100%; margin-left: auto; margin-right: auto;">
+                <tbody>
+                    <tr style="height: 47px;">
+                        <td style="width: 300px; height: 47px;">
+                            <p><h2 style="text-align: left; color: #00008B;"><strong><a href="{% url 'single_post' post.id %}">{{ post.title }}</a></strong></h2></p>
+                        </td>
+                        <td style="width: 325.6px; height: 47px;" colspan="2">
+                            <p style="text-align: justify;">{{ post.text|safe }}</p>
+                        </td>
+                        <td style="width: 208.2px; height: 47px;">
+                            <p style="text-align: right;">{{ post.author }}</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <a style="width: 100%; margin-left: auto; margin-right: auto;">
+                <p style="width: 100%; height: 35.975px;">
+                    <p style="text-align: justify;">Category: {{ post.category }}</p>
+                        <a>Replies:</a>
+                        {% if post.author %}
+                            {% if post.post_replies.all %}
+                                {% for reply in post.post_replies.all %}
+                                <p>{{ reply.author }}: <a href="{% url 'single_reply' reply.id %}">{{ reply.preview|safe }}</a></p>
+                                {% endfor %}
+                            {% endif %}</p>
+                        {% endif %}
+
+                        <p style="width: 100%; height: 35.975px; text-align: right;" colspan="2">
+                            <span style="text-align: right; color: #008000;">{{ post.creation_date }}</span>
+                        </p>
+                    </p>
+                </tbody>
+            </a>
+<hr />
+        {% endfor %}
+    {% else %}
+        <h4>No posts found</h4>
+    {% endif %}
+
+<br>
+<div class="text-center"><a>Pages:</a>
+   {% if page_obj.has_previous %}
+
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+</div>
+
+
+{% endblock content %}
